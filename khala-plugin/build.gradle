@@ -1,0 +1,42 @@
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+apply from: '../script/upload.gradle'
+
+dependencies {
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleDependency
+    implementation 'com.android.tools.build:gradle:3.5.3'
+    implementation 'org.javassist:javassist:3.26.0-GA'
+    implementation 'org.dom4j:dom4j:2.1.1'
+    implementation 'io.nebula.platform:khala-base:1.0.0'
+//    implementation project(":component-base")
+    implementation 'net.sf.json-lib:json-lib:2.4:jdk13'
+    implementation localGroovy()
+    //gradle sdk
+    implementation gradleApi()
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version" //gradle sdk
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"//gradle plugin
+}
+
+parseLocalProperties()
+
+uploadArchives {
+    def local = LOCAL == "1"
+    repositories.mavenDeployer {
+        if (local) {
+            repository(url: uri(LOCAL_REPO))
+        } else {
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+        }
+        pom.project {
+            groupId 'io.nebula.platform'
+            artifactId 'khala-plugin'
+            version '1.0.0'
+        }
+    }
+}
+
+// ./gradlew assembleDebug -Dorg.gradle.daemon=false -Dorg.gradle.debug=true
