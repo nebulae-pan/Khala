@@ -1,2 +1,2 @@
-include ':app', ':khala-base', ':khala-plugin'
+include ':app', ':khala-base', ':khala-plugin', ':cpnt-test'
 rootProject.name='Khala'

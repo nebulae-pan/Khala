@@ -19,10 +19,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"//gradle plugin
 }
 
-parseLocalProperties()
-
 uploadArchives {
-    def local = LOCAL == "1"
+    def local = true
     repositories.mavenDeployer {
         if (local) {
             repository(url: uri(LOCAL_REPO))

@@ -7,17 +7,22 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url { uri(LOCAL_REPO) }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        if (HAS_LOCAL_PLUGIN) {
+            classpath 'io.nebula.platform:khala-plugin:1.0.0'
+        }
     }
 }
 
-allprojects {
+subprojects {
     repositories {
         google()
         jcenter()
@@ -29,4 +34,20 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task deployPlugins {
+
+}
+
+project.subprojects.last().afterEvaluate {
+    def baseProject = project.subprojects.find {
+        it.name == "khala-base"
+    }
+    def pluginProject = project.subprojects.find {
+        it.name == "khala-plugin"
+    }
+    def pluginDeploy = pluginProject.tasks.findByName("uploadArchives")
+    deployPlugins.dependsOn(pluginDeploy)
+    pluginDeploy.dependsOn(baseProject.tasks.findByName("uploadArchives"))
 }

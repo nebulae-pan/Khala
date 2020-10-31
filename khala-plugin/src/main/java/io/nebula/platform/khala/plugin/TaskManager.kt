@@ -51,7 +51,7 @@ class TaskManager(private val project: Project,
         if (prefix == null) {
             prefix = "${project.name}_"
         }
-        prefix.replace('-', '_')
+        prefix = prefix.replace('-', '_')
         val task = taskFactory.register(PrefixResources.ConfigAction(scope, file, prefix))
         task.get().dependsOn(scope.taskContainer.mergeResourcesTask)
         pluginTaskContainer?.prefixResources = task.get()

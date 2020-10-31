@@ -1,5 +1,8 @@
+def repo = file(project.rootProject.projectDir.absolutePath + "/repo")
 ext {
     parseLocalProperties = this.&parseLocalProperties
+    LOCAL_REPO = repo.path
+    HAS_LOCAL_PLUGIN = file(LOCAL_REPO + "/io/nebula/platform/khala-plugin").exists()
 }
 
 def parseLocalProperties() {
@@ -13,4 +16,4 @@ def parseLocalProperties() {
         }
     }
 }
-parseLocalProperties()
+//parseLocalProperties()

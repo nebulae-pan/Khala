@@ -5,7 +5,7 @@ apply from: '../script/upload.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.fragment:fragment:1.2.5'
-    implementation("com.google.guava:guava:28.1-android")
+    implementation("com.google.guava:guava:28.1-jre")
     testImplementation 'junit:junit:4.12'
 }
 
@@ -32,10 +32,8 @@ android.libraryVariants.all { variant ->
     artifacts.add('archives', task)
 }
 
-parseLocalProperties()
-
 uploadArchives {
-    def local = LOCAL == "1"
+    def local = true
     repositories.mavenDeployer {
         if (local) {
             repository(url: uri(LOCAL_REPO))
